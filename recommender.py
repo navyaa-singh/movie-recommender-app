@@ -5,7 +5,7 @@ import gdown
 
 # 1. Data Loading
 file_id = '1-gmcKrv_9FYmu7P9NxnXEla1GWwGF3m1'
-url = f'https://drive.google.com/uc?id={file_id}'
+url = f'https://drive.google.com/uc?id=1-gmcKrv_9FYmu7P9NxnXEla1GWwGF3m1'
 output = 'similarity.pbz2'
 
 if not os.path.exists(output):
@@ -29,3 +29,4 @@ def recommend(movie):
         recommended_movie_names.append(movies.iloc[i[0]].title)
 
     return recommended_movie_names
+
