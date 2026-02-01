@@ -21,7 +21,13 @@ similarity = load_similarity()
 
 # 2. THE MISSING FUNCTION (Add this now!)
 def recommend(movie):
-    index = movies[movies['title'] == movie].index[0]
+    # This line makes the search case-insensitive and handles errors
+    try:
+        # We lowercase both the user input and the database titles to find a match
+        index = movies[movies['title'].str.lower() == movie.lower()].index[0]
+    except IndexError:
+        return ["Movie not found. Please check your spelling!"]
+
     distances = sorted(list(enumerate(similarity[index])), reverse=True, key=lambda x: x[1])
     
     recommended_movie_names = []
@@ -29,4 +35,5 @@ def recommend(movie):
         recommended_movie_names.append(movies.iloc[i[0]].title)
 
     return recommended_movie_names
+
 
