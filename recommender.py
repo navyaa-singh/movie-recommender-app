@@ -1,21 +1,31 @@
 import pickle
 import bz2
 import os
-import gdown  # This helper library handles the download
+import gdown 
 
-# 1. Your Google Drive File ID
-file_id = '1-gmcKrv_9FYmu7P9NxnXEla1GWwGF3m1' 
-url = 'https://drive.google.com/uc?id=1-gmcKrv_9FYmu7P9NxnXEla1GWwGF3m1'
+# 1. Data Loading
+file_id = '1-gmcKrv_9FYmu7P9NxnXEla1GWwGF3m1'
+url = f'https://drive.google.com/uc?id={file_id}'
 output = 'similarity.pbz2'
 
-# 2. This checks if the file is already there; if not, it downloads it
 if not os.path.exists(output):
     gdown.download(url, output, quiet=False)
 
-# 3. Now load it as we did before
+movies = pickle.load(open('movies.pkl', 'rb'))
+
 def load_similarity():
     with bz2.BZ2File(output, 'rb') as f:
         return pickle.load(f)
 
-
 similarity = load_similarity()
+
+# 2. THE MISSING FUNCTION (Add this now!)
+def recommend(movie):
+    index = movies[movies['title'] == movie].index[0]
+    distances = sorted(list(enumerate(similarity[index])), reverse=True, key=lambda x: x[1])
+    
+    recommended_movie_names = []
+    for i in distances[1:6]:
+        recommended_movie_names.append(movies.iloc[i[0]].title)
+
+    return recommended_movie_names
