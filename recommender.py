@@ -25,15 +25,12 @@ def recommend(movie):
     try:
         # We lowercase both the user input and the database titles to find a match
         index = movies[movies['title'].str.lower() == movie.lower()].index[0]
+        distances = sorted(list(enumerate(similarity[index])), reverse=True, key=lambda x: x[1])
+        recommended_movie_names = []
+        for i in distances[1:6]:
+            recommended_movie_names.append(movies.iloc[i[0]].title)
+        return recommended_movie_names
+        
     except IndexError:
+        # This prevents the app from crashing if the movie isn't found
         return ["Movie not found. Please check your spelling!"]
-
-    distances = sorted(list(enumerate(similarity[index])), reverse=True, key=lambda x: x[1])
-    
-    recommended_movie_names = []
-    for i in distances[1:6]:
-        recommended_movie_names.append(movies.iloc[i[0]].title)
-
-    return recommended_movie_names
-
-
